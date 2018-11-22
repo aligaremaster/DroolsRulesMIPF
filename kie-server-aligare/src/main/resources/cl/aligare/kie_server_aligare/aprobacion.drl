@@ -1,0 +1,69 @@
+package cl.aligare.kie.aligare_kie_proyecto;
+
+import cl.aligare.kie_server_aligare.Applicant
+import java.util.Date
+import java.util.Calendar
+
+no-loop
+
+// Calcular Edad a partir de fecha de nacimiento
+function int getEdad(Date fechaNac) {
+    Date currentDate=new Date();
+    int edad = 0;
+    
+    System.out.println("Fecha Nacimiento : " + fechaNac);
+    System.out.println("Fecha actual : " + currentDate);
+    
+    int mes1 = (currentDate.getYear() * 12) + (currentDate.getMonth()+1);
+    int mes2 = (fechaNac.getYear() * 12) + (fechaNac.getMonth() + 1);
+    edad = (mes1-mes2)/12;
+    
+    System.out.println("Edad : " + edad);
+    
+    return edad;
+}
+
+rule "Aprobar Mayoria Edad"
+    @author(REspinoza)
+    @dateOfCreation(13-11-2018)
+when
+    $a: Applicant(aprobado == false, getEdad(fechaNacimiento) >= 18 ,ingresos>=700000)
+then
+    System.out.println("Rule Name : " + 
+    drools.getRule().getName());
+    System.out.println("Tuples : " + drools.getTuple());
+    System.out.println("Rule Metadata : " + drools.getRule().getMetaData());
+    
+    modify($a) {
+        setAprobado(true);
+    }
+end
+
+/*
+rule "No Aprobar"
+when
+    $a: Applicant(aprobado == false)
+then
+    modify($a) {
+        setAprobado(false);
+    }
+end
+*/
+
+
+
+rule "Mostrar Productos"
+@author(acamiletti)
+@dateOfCreation(22-11-2018)
+when
+$a: Applicant(aprobado == false,ingresos>=700000)
+then
+    System.out.println("Rule Name : " + 
+    drools.getRule().getName());
+    System.out.println("Tuples : " + drools.getTuple());
+    System.out.println("Rule Metadata : " + drools.getRule().getMetaData());
+    
+    modify($a) {
+        setAprobado(true);
+    }
+end
